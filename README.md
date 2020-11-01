@@ -12,7 +12,10 @@ import java.security.MessageDigest
 import kotlin.math.sqrt
 
 fun main(args: Array<String>) {
-    val profiler = SimpleProfiler(reportSec = 10, enclosingSectionName = "--total--", resetAfterSampleCount = 500000)
+    val profiler = SimpleProfiler(
+            reportSec = 10, 
+            enclosingSectionName = "--total--", 
+            resetAfterSampleCount = 500000)
 
     profiler.startSection("init")
     val md5 = MessageDigest.getInstance("MD5")
@@ -61,7 +64,7 @@ fun main(args: Array<String>) {
 }
 ```
 
-Sample Output:
+Sample output:
 ```
 --total--      : took      9.95 s (100.00)%,     97,136 samples,    102.39 (   102.39) ms per 1K samples,      9,766.85 (     9,766.85) samples/s
 probablePrime  : took      8.34 s ( 83.81)%,     97,136 samples,     85.81 (    85.81) ms per 1K samples,     11,653.93 (    11,653.93) samples/s

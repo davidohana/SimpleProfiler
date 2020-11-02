@@ -111,7 +111,7 @@ data class ProfiledSectionStats(
         var tookSecText = (totalTimeNano / 1000000000.0).format(6, 2) + " s"
         if (enclosingTimeNano > 0) {
             val contributionPercent = (100.0 * totalTimeNano / enclosingTimeNano).format(3, 2)
-            tookSecText += " ($contributionPercent)%"
+            tookSecText += " ($contributionPercent%)"
         }
         val sampleCountText = sampleCount.format(10)
         var msPerKSamples = (totalTimeNano / (1000.0 * sampleCount.toDouble())).format(6, 2)

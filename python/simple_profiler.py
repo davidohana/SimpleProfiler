@@ -133,7 +133,7 @@ class ProfiledSectionStats:
     def to_string(self, enclosing_time_sec: int, include_batch_rates: bool):
         took_sec_text = f"{self.total_time_sec:>8.2f} s"
         if enclosing_time_sec > 0:
-            took_sec_text += f" ({100 * self.total_time_sec / enclosing_time_sec:>6.2f})%"
+            took_sec_text += f" ({100 * self.total_time_sec / enclosing_time_sec:>6.2f}%)"
 
         ms_per_k_samples = f"{1000000 * self.total_time_sec / self.sample_count: 7.2f}"
         samples_per_sec = f"{self.sample_count / self.total_time_sec: 15,.2f}"

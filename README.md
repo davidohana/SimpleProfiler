@@ -5,6 +5,9 @@ Simple profiling tool for measuring run-time performance of batch jobs.
 
 Contains implementations in **Kotlin** and **Python 3.6+**.
 
+Read my [blog post](https://medium.com/@davidoha/simple-runtime-profiling-of-batch-jobs-in-production-ddd59e192924) about it. 
+
+
 ### Example: Measureing performance of various hashing algorithms
 
 In Kotlin: 

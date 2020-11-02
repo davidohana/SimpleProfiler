@@ -38,7 +38,7 @@ class NullProfiler(Profiler):
 
 
 class SimpleProfiler(Profiler):
-    def __init__(self, reset_after_sample_count=0, enclosing_section_name="", printer=print, report_sec=30):
+    def __init__(self, reset_after_sample_count=0, enclosing_section_name="total", printer=print, report_sec=30):
         self.printer = printer
         self.enclosing_section_name = enclosing_section_name
         self.reset_after_sample_count = reset_after_sample_count

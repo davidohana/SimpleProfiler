@@ -27,7 +27,7 @@ class NullProfiler : Profiler {
 
 class SimpleProfiler(
     val resetAfterSampleCount: Long = 0,
-    val enclosingSectionName: String = "",
+    val enclosingSectionName: String = "total",
     val printer: (String) -> Unit = ::println,
 ) : Profiler {
     private val sectionToStats = mutableMapOf<String, ProfiledSectionStats>()

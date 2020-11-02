@@ -7,8 +7,7 @@ from simple_profiler import SimpleProfiler
 
 print("app started")
 
-profiler = SimpleProfiler(enclosing_section_name="total",
-                          reset_after_sample_count=500000)
+profiler = SimpleProfiler(reset_after_sample_count=500000)
 
 profiler.start_section("init")
 payload = os.urandom(10000)

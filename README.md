@@ -20,10 +20,7 @@ import java.security.MessageDigest
 import kotlin.math.sqrt
 
 fun main() {
-    val profiler = SimpleProfiler(
-        enclosingSectionName = "total",
-        resetAfterSampleCount = 500000
-    )
+    val profiler = SimpleProfiler(resetAfterSampleCount = 500000)
 
     println("app started")
 
@@ -82,8 +79,7 @@ from simple_profiler import SimpleProfiler
 
 print("app started")
 
-profiler = SimpleProfiler(enclosing_section_name="total", 
-                          reset_after_sample_count=500000)
+profiler = SimpleProfiler(reset_after_sample_count=500000)
 
 profiler.start_section("init")
 payload = os.urandom(10000)

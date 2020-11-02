@@ -109,15 +109,16 @@ class SimpleProfiler(Profiler):
 
         sections = self.section_to_stats.values()
         sorted_sections = sorted(sections, key=lambda it: it.total_time_sec, reverse=True)
-        for section in sorted_sections:
-            text += section.to_string(enclosing_time_sec, include_batch_rates) + os.linesep
+        lines = map(lambda it: it.to_string(enclosing_time_sec, include_batch_rates), sorted_sections)
+        text = os.linesep.join(lines)
         self.printer(text)
 
     def periodic_report(self):
         if time.time() - self.last_report_timestamp_sec < self.report_sec:
-            return
+            return False
         self.print_results()
         self.last_report_timestamp_sec = time.time()
+        return True
 
 
 class ProfiledSectionStats:
@@ -144,5 +145,5 @@ class ProfiledSectionStats:
 
         return f"{self.section_name: <15}: took {took_sec_text}, " \
                f"{self.sample_count: >10,} samples, " \
-               f"{ms_per_k_samples} ms per 1K samples, " \
+               f"{ms_per_k_samples} ms / 1000 samples, " \
                f"{samples_per_sec} hz"

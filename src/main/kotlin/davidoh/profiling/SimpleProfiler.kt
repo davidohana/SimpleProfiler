@@ -4,7 +4,7 @@ interface Profiler {
     fun startSection(name: String)
     fun endSection(name: String = "")
     fun printResults()
-    fun periodicReport()
+    fun periodicReport(): Boolean
 }
 
 class NullProfiler : Profiler {
@@ -17,15 +17,14 @@ class NullProfiler : Profiler {
     override fun printResults() {
     }
 
-    override fun periodicReport() {
-    }
+    override fun periodicReport() = false
 }
 
 class SimpleProfiler(
-        val resetAfterSampleCount: Long = 0,
-        val enclosingSectionName: String = "",
-        val printer: (String) -> Unit = ::println,
-        val reportSec: Int = 30
+    val resetAfterSampleCount: Long = 0,
+    val enclosingSectionName: String = "",
+    val printer: (String) -> Unit = ::println,
+    val reportSec: Int = 30
 ) : Profiler {
     private val sectionToStats = mutableMapOf<String, ProfiledSectionStats>()
     private var lastReportTimeMillis = System.currentTimeMillis()
@@ -51,7 +50,7 @@ class SimpleProfiler(
         check(sectionName.isNotBlank())
 
         val section = sectionToStats[sectionName]
-                ?: throw IllegalArgumentException("Section $name does not exist")
+            ?: throw IllegalArgumentException("Section $name does not exist")
 
         if (section.startTimeNano == 0L)
             throw IllegalStateException("section $name was not started")
@@ -78,28 +77,29 @@ class SimpleProfiler(
 
         val includeBatchRates = resetAfterSampleCount > 0
         val text = sectionToStats.values
-                .sortedByDescending { it.totalTimeNano }
-                .map { it.toString(enclosingTimeNano, includeBatchRates) }
-                .joinToString(System.lineSeparator())
+            .sortedByDescending { it.totalTimeNano }
+            .map { it.toString(enclosingTimeNano, includeBatchRates) }
+            .joinToString(System.lineSeparator())
         printer(text)
     }
 
-    override fun periodicReport() {
-        if (System.currentTimeMillis() - lastReportTimeMillis < reportSec * 1000) return
+    override fun periodicReport(): Boolean {
+        if (System.currentTimeMillis() - lastReportTimeMillis < reportSec * 1000) return false
 
         printResults()
         lastReportTimeMillis = System.currentTimeMillis()
+        return true
     }
 }
 
 
 data class ProfiledSectionStats(
-        val sectionName: String,
-        var startTimeNano: Long = 0,
-        var sampleCount: Long = 0,
-        var totalTimeNano: Long = 0,
-        var sampleCountBatch: Long = 0,
-        var totalTimeNanoBatch: Long = 0,
+    val sectionName: String,
+    var startTimeNano: Long = 0,
+    var sampleCount: Long = 0,
+    var totalTimeNano: Long = 0,
+    var sampleCountBatch: Long = 0,
+    var totalTimeNanoBatch: Long = 0,
 ) {
     fun toString(enclosingTimeNano: Long, includeBatchRates: Boolean): String {
         var tookSecText = (totalTimeNano / 1000000000.0).format(6, 2) + " s"
@@ -115,13 +115,14 @@ data class ProfiledSectionStats(
             samplesPerSec += " (${(sampleCountBatch.toDouble() / totalTimeNanoBatch * 1000000000).format(10, 2)})"
         }
 
-        return "${sectionName.padEnd(15)}: took $tookSecText, $sampleCountText samples, $msPerKSamples ms per 1K samples, $samplesPerSec samples/s"
+        return "${sectionName.padEnd(15)}: took $tookSecText, $sampleCountText samples, " +
+                "$msPerKSamples ms / 1000 samples, $samplesPerSec hz"
     }
 }
 
 fun Number.format(
-        charsAboveZero: Int = 1, charsBelowZero: Int = 0,
-        isSigned: Boolean = false, leadingZeros: Boolean = false
+    charsAboveZero: Int = 1, charsBelowZero: Int = 0,
+    isSigned: Boolean = false, leadingZeros: Boolean = false
 ): String {
     val isInteger = this is Long || this is Int || this is Short
 

@@ -25,6 +25,8 @@ class Profiler(ABC):
 
 
 class NullProfiler(Profiler):
+    """A no-op profiler. Use it instead of SimpleProfiler in case you want to disable profiling."""
+
     def start_section(self, section_name: str):
         pass
 
@@ -47,6 +49,8 @@ class SimpleProfiler(Profiler):
         self.last_started_section_name = ""
 
     def start_section(self, section_name: str):
+        """Start measuring a section"""
+
         if not section_name:
             raise ValueError("Section name is empty")
         self.last_started_section_name = section_name
@@ -62,6 +66,8 @@ class SimpleProfiler(Profiler):
         section.start_time_sec = time.time()
 
     def end_section(self, name=""):
+        """End measuring a section. Leave section name empty to end the last started section."""
+
         now = time.time()
 
         section_name = name
@@ -90,6 +96,7 @@ class SimpleProfiler(Profiler):
         section.start_time_sec = 0
 
     def report(self, period_sec=30):
+        """Print results using [printer] function. By default prints to stdout."""
         if time.time() - self.last_report_timestamp_sec < period_sec:
             return False
 

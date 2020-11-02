@@ -34,6 +34,9 @@ class SimpleProfiler(
     private var lastReportTimeMillis = System.currentTimeMillis()
     private var lastStartedSectionName = ""
 
+    /**
+     * Start measuring a section.
+     */
     override fun startSection(name: String) {
         require(name.isNotBlank())
         lastStartedSectionName = name

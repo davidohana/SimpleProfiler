@@ -1,8 +1,7 @@
 """
-Description : A simple section-based performance profiler
-Author      : David Ohana
-Author_email: david.ohana@ibm.com
-License     : MIT
+Description : A section-based runtime profiler.
+Author      : david.ohana@ibm.com
+License     : Apache v2
 """
 import os
 import time

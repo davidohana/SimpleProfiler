@@ -1,3 +1,9 @@
+/**
+Description : A section-based runtime profiler.
+Author      : david.ohana@ibm.com
+License     : Apache v2
+**/
+
 package davidoh.profiling
 
 interface Profiler {

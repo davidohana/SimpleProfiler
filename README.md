@@ -134,3 +134,12 @@ random         : took      0.03 s (  0.29)%,     86,889 samples,      0.33 (    
 sqrt           : took      0.01 s (  0.13)%,     86,889 samples,      0.15 (     0.15) ms / 1000 samples,  6,703,392.64 ( 6,703,392.64) hz
 -----
 ```
+
+## Comments
+
+* The profiler is not (yet) thread-safe. 
+
+## License
+
+Apache-2.0
+

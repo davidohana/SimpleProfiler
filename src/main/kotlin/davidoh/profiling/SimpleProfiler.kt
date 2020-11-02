@@ -2,17 +2,19 @@
 Description : A section-based runtime profiler.
 Author      : david.ohana@ibm.com
 License     : Apache v2
-**/
+ **/
 
 package davidoh.profiling
 
 interface Profiler {
     fun startSection(name: String)
     fun endSection(name: String = "")
-    fun printResults()
-    fun periodicReport(): Boolean
+    fun report(periodSec: Int = 30): Boolean
 }
 
+/**
+ * A no-op profiler. Use it instead of SimpleProfiler in case you want to disable profiling.
+ */
 class NullProfiler : Profiler {
     override fun startSection(name: String) {
     }
@@ -20,21 +22,17 @@ class NullProfiler : Profiler {
     override fun endSection(name: String) {
     }
 
-    override fun printResults() {
-    }
-
-    override fun periodicReport() = false
+    override fun report(periodSec: Int) = false
 }
 
 class SimpleProfiler(
     val resetAfterSampleCount: Long = 0,
     val enclosingSectionName: String = "",
     val printer: (String) -> Unit = ::println,
-    val reportSec: Int = 30
 ) : Profiler {
     private val sectionToStats = mutableMapOf<String, ProfiledSectionStats>()
     private var lastReportTimeMillis = System.currentTimeMillis()
-    var lastStartedSectionName = ""
+    private var lastStartedSectionName = ""
 
     override fun startSection(name: String) {
         require(name.isNotBlank())
@@ -46,6 +44,11 @@ class SimpleProfiler(
         section.startTimeNano = System.nanoTime()
     }
 
+    /**
+     * End measuring a section.
+     *
+     * @param name name of the section to end. When empty or omitted, the last started section will be ended.
+     */
     override fun endSection(name: String) {
         val nowNano = System.nanoTime()
 
@@ -73,7 +76,13 @@ class SimpleProfiler(
         section.startTimeNano = 0
     }
 
-    override fun printResults() {
+    /**
+     * Print results using [printer] function. By default prints to stdout.
+     */
+    override fun report(periodSec: Int): Boolean {
+        if (System.currentTimeMillis() - lastReportTimeMillis < periodSec * 1000)
+            return false
+
         var enclosingTimeNano = 0L
         if (enclosingSectionName.isNotEmpty()) {
             val enclosingSection = sectionToStats[enclosingSectionName]
@@ -87,12 +96,7 @@ class SimpleProfiler(
             .map { it.toString(enclosingTimeNano, includeBatchRates) }
             .joinToString(System.lineSeparator())
         printer(text)
-    }
 
-    override fun periodicReport(): Boolean {
-        if (System.currentTimeMillis() - lastReportTimeMillis < reportSec * 1000) return false
-
-        printResults()
         lastReportTimeMillis = System.currentTimeMillis()
         return true
     }

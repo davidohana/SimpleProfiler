@@ -18,7 +18,6 @@ import kotlin.math.sqrt
 
 fun main() {
     val profiler = SimpleProfiler(
-        reportSec = 10,
         enclosingSectionName = "total",
         resetAfterSampleCount = 500000
     )
@@ -62,7 +61,7 @@ fun main() {
         profiler.endSection()
 
         profiler.endSection("total")
-        if (profiler.periodicReport())
+        if (profiler.report())
             println("-----")
     }
 }
@@ -80,8 +79,7 @@ from simple_profiler import SimpleProfiler
 
 print("app started")
 
-profiler = SimpleProfiler(report_sec=10, 
-                          enclosing_section_name="total", 
+profiler = SimpleProfiler(enclosing_section_name="total", 
                           reset_after_sample_count=500000)
 
 profiler.start_section("init")
@@ -118,20 +116,20 @@ while True:
 
     profiler.end_section("total")
 
-    if profiler.periodic_report():
+    if profiler.report():
         print("-------")
 ```
 
 Sample output:
 ```
-total          : took      9.87 s (100.00)%,     86,889 samples,    113.58 (   113.58) ms / 1000 samples,      8,804.39 (     8,804.39) hz
-hashing        : took      9.76 s ( 98.89)%,     86,889 samples,    112.32 (   112.32) ms / 1000 samples,      8,903.15 (     8,903.15) hz
-sha1           : took      3.89 s ( 39.37)%,     86,889 samples,     44.72 (    44.72) ms / 1000 samples,     22,362.05 (    22,362.05) hz
-sha256         : took      3.07 s ( 31.13)%,     86,889 samples,     35.36 (    35.36) ms / 1000 samples,     28,283.50 (    28,283.50) hz
-md5            : took      2.72 s ( 27.54)%,     86,889 samples,     31.28 (    31.28) ms / 1000 samples,     31,970.85 (    31,970.85) hz
-init           : took      0.06 s (  0.57)%,          1 samples, 56,346.55 (56,346.55) ms / 1000 samples,         17.75 (        17.75) hz
-random         : took      0.03 s (  0.29)%,     86,889 samples,      0.33 (     0.33) ms / 1000 samples,  3,023,135.87 ( 3,023,135.87) hz
-sqrt           : took      0.01 s (  0.13)%,     86,889 samples,      0.15 (     0.15) ms / 1000 samples,  6,703,392.64 ( 6,703,392.64) hz
+total          : took      9.87 s (100.00%),     86,889 samples,    113.58 (   113.58) ms / 1000 samples,      8,804.39 (     8,804.39) hz
+hashing        : took      9.76 s ( 98.89%),     86,889 samples,    112.32 (   112.32) ms / 1000 samples,      8,903.15 (     8,903.15) hz
+sha1           : took      3.89 s ( 39.37%),     86,889 samples,     44.72 (    44.72) ms / 1000 samples,     22,362.05 (    22,362.05) hz
+sha256         : took      3.07 s ( 31.13%),     86,889 samples,     35.36 (    35.36) ms / 1000 samples,     28,283.50 (    28,283.50) hz
+md5            : took      2.72 s ( 27.54%),     86,889 samples,     31.28 (    31.28) ms / 1000 samples,     31,970.85 (    31,970.85) hz
+init           : took      0.06 s (  0.57%),          1 samples, 56,346.55 (56,346.55) ms / 1000 samples,         17.75 (        17.75) hz
+random         : took      0.03 s (  0.29%),     86,889 samples,      0.33 (     0.33) ms / 1000 samples,  3,023,135.87 ( 3,023,135.87) hz
+sqrt           : took      0.01 s (  0.13%),     86,889 samples,      0.15 (     0.15) ms / 1000 samples,  6,703,392.64 ( 6,703,392.64) hz
 -----
 ```
 

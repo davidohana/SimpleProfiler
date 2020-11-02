@@ -6,7 +6,6 @@ import kotlin.math.sqrt
 
 fun main() {
     val profiler = SimpleProfiler(
-        reportSec = 10,
         enclosingSectionName = "total",
         resetAfterSampleCount = 500000
     )
@@ -54,7 +53,7 @@ fun main() {
 //        profiler.endSection()
 
         profiler.endSection("total")
-        if (profiler.periodicReport())
+        if (profiler.report(10))
             println("-----")
     }
 }

@@ -20,11 +20,7 @@ class Profiler(ABC):
         pass
 
     @abstractmethod
-    def periodic_report(self):
-        pass
-
-    @abstractmethod
-    def print_results(self):
+    def report(self, period_sec=30):
         pass
 
 
@@ -35,10 +31,7 @@ class NullProfiler(Profiler):
     def end_section(self, section_name=""):
         pass
 
-    def periodic_report(self):
-        pass
-
-    def print_results(self):
+    def report(self, period_sec=30):
         pass
 
 
@@ -96,7 +89,10 @@ class SimpleProfiler(Profiler):
         section.total_time_sec_batch += took_sec
         section.start_time_sec = 0
 
-    def print_results(self):
+    def report(self, period_sec=30):
+        if time.time() - self.last_report_timestamp_sec < period_sec:
+            return False
+
         enclosing_time_sec = 0
         if self.enclosing_section_name:
             enclosing_section: ProfiledSectionStats = self.section_to_stats.get(self.enclosing_section_name, None)
@@ -104,7 +100,6 @@ class SimpleProfiler(Profiler):
                 enclosing_time_sec = enclosing_section.total_time_sec
 
         include_batch_rates = self.reset_after_sample_count > 0
-        text = ""
 
         sections = self.section_to_stats.values()
         sorted_sections = sorted(sections, key=lambda it: it.total_time_sec, reverse=True)
@@ -112,10 +107,6 @@ class SimpleProfiler(Profiler):
         text = os.linesep.join(lines)
         self.printer(text)
 
-    def periodic_report(self):
-        if time.time() - self.last_report_timestamp_sec < self.report_sec:
-            return False
-        self.print_results()
         self.last_report_timestamp_sec = time.time()
         return True
 

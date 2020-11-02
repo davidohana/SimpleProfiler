@@ -36,7 +36,7 @@ while True:
 
     profiler.start_section("random")
     rand_number = random.random() * 1000000 + 1
-    profiler.end_section("random")
+    profiler.end_section()
 
     profiler.start_section("sqrt")
     math.sqrt(rand_number)

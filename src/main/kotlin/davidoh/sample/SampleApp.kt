@@ -1,11 +1,11 @@
 package davidoh.sample
 
-import davidoh.profiling.SimpleProfiler
+import davidoh.profiling.*
 import java.security.MessageDigest
 import kotlin.math.sqrt
 
 fun main() {
-    val profiler = SimpleProfiler(
+    val profiler: Profiler = SimpleProfiler(
         enclosingSectionName = "total",
         resetAfterSampleCount = 500000
     )

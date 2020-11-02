@@ -1,9 +1,15 @@
+package davidoh.sample
+
 import davidoh.profiling.SimpleProfiler
 import java.security.MessageDigest
 import kotlin.math.sqrt
 
-fun main(args: Array<String>) {
-    val profiler = SimpleProfiler(reportSec = 10, enclosingSectionName = "total", resetAfterSampleCount = 500000)
+fun main() {
+    val profiler = SimpleProfiler(
+        reportSec = 10,
+        enclosingSectionName = "total",
+        resetAfterSampleCount = 500000
+    )
 
     println("app started")
 

@@ -127,7 +127,7 @@ data class ProfiledSectionStats(
             tookSecText += " ($contributionPercent%)"
         }
         val sampleCountText = sampleCount.format(12)
-        var msPerKSamples = (totalTimeNano / (1000.0 * sampleCount.toDouble())).format(6, 2)
+        var msPerKSamples = (totalTimeNano / (1000.0 * sampleCount.toDouble())).format(8, 2)
         var samplesPerSec = (sampleCount.toDouble() / totalTimeNano * 1000000000).format(10, 2)
         if (includeBatchRates) {
             msPerKSamples += " (${(totalTimeNanoBatch / (1000.0 * sampleCountBatch.toDouble())).format(6, 2)})"

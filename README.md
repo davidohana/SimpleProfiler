@@ -1,5 +1,6 @@
 # SimpleProfiler
 
+![Sample Output](docs/output_sample.png)
 
 Simple profiling tool for measuring run-time performance of batch jobs.
 
@@ -121,14 +122,14 @@ while True:
 
 Sample output:
 ```
-total          : took      9.87 s (100.00%),     86,889 samples,    113.58 (   113.58) ms / 1000 samples,      8,804.39 (     8,804.39) hz
-hashing        : took      9.76 s ( 98.89%),     86,889 samples,    112.32 (   112.32) ms / 1000 samples,      8,903.15 (     8,903.15) hz
-sha1           : took      3.89 s ( 39.37%),     86,889 samples,     44.72 (    44.72) ms / 1000 samples,     22,362.05 (    22,362.05) hz
-sha256         : took      3.07 s ( 31.13%),     86,889 samples,     35.36 (    35.36) ms / 1000 samples,     28,283.50 (    28,283.50) hz
-md5            : took      2.72 s ( 27.54%),     86,889 samples,     31.28 (    31.28) ms / 1000 samples,     31,970.85 (    31,970.85) hz
-init           : took      0.06 s (  0.57%),          1 samples, 56,346.55 (56,346.55) ms / 1000 samples,         17.75 (        17.75) hz
-random         : took      0.03 s (  0.29%),     86,889 samples,      0.33 (     0.33) ms / 1000 samples,  3,023,135.87 ( 3,023,135.87) hz
-sqrt           : took      0.01 s (  0.13%),     86,889 samples,      0.15 (     0.15) ms / 1000 samples,  6,703,392.64 ( 6,703,392.64) hz
+total               : took      9.94 s (100.00%),       96,776 samples,    102.69 (   102.69) ms / 1000 samples,      9,738.11 (     9,738.11) hz
+ hashing            : took      9.87 s ( 99.33%),       96,776 samples,    102.00 (   102.00) ms / 1000 samples,      9,803.81 (     9,803.81) hz
+  sha1              : took      3.98 s ( 40.01%),       96,776 samples,     41.09 (    41.09) ms / 1000 samples,     24,339.19 (    24,339.19) hz
+  sha256            : took      3.04 s ( 30.58%),       96,776 samples,     31.40 (    31.40) ms / 1000 samples,     31,842.21 (    31,842.21) hz
+  md5               : took      2.80 s ( 28.16%),       96,776 samples,     28.91 (    28.91) ms / 1000 samples,     34,585.10 (    34,585.10) hz
+init                : took      0.01 s (  0.14%),            1 samples, 14,022.17 (14,022.17) ms / 1000 samples,         71.32 (        71.32) hz
+ random             : took      0.01 s (  0.12%),       96,776 samples,      0.13 (     0.13) ms / 1000 samples,  7,946,587.01 ( 7,946,587.01) hz
+ sqrt               : took      0.01 s (  0.07%),       96,776 samples,      0.08 (     0.08) ms / 1000 samples, 13,209,724.44 (13,209,724.44) hz
 -----
 ```
 

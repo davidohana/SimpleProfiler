@@ -6,6 +6,7 @@ License     : Apache v2
 
 package davidoh.profiling
 
+
 interface Profiler {
     fun startSection(name: String)
     fun endSection(name: String = "")
@@ -33,6 +34,7 @@ class SimpleProfiler(
     private val sectionToStats = mutableMapOf<String, ProfiledSectionStats>()
     private var lastReportTimeMillis = System.currentTimeMillis()
     private var lastStartedSectionName = ""
+    private var nesting = 0
 
     /**
      * Start measuring a section.
@@ -41,9 +43,10 @@ class SimpleProfiler(
         require(name.isNotBlank())
         lastStartedSectionName = name
 
-        val section = sectionToStats.getOrPut(name, { ProfiledSectionStats(name) })
+        val section = sectionToStats.getOrPut(name, { ProfiledSectionStats(name, nesting) })
         if (section.startTimeNano != 0L)
             throw IllegalArgumentException("Section $name already started")
+        nesting++
         section.startTimeNano = System.nanoTime()
     }
 
@@ -54,6 +57,8 @@ class SimpleProfiler(
      */
     override fun endSection(name: String) {
         val nowNano = System.nanoTime()
+
+        nesting--
 
         var sectionName = name
         if (name == "")
@@ -108,6 +113,7 @@ class SimpleProfiler(
 
 data class ProfiledSectionStats(
     val sectionName: String,
+    var nesting: Int = 0,
     var startTimeNano: Long = 0,
     var sampleCount: Long = 0,
     var totalTimeNano: Long = 0,
@@ -120,7 +126,7 @@ data class ProfiledSectionStats(
             val contributionPercent = (100.0 * totalTimeNano / enclosingTimeNano).format(3, 2)
             tookSecText += " ($contributionPercent%)"
         }
-        val sampleCountText = sampleCount.format(10)
+        val sampleCountText = sampleCount.format(12)
         var msPerKSamples = (totalTimeNano / (1000.0 * sampleCount.toDouble())).format(6, 2)
         var samplesPerSec = (sampleCount.toDouble() / totalTimeNano * 1000000000).format(10, 2)
         if (includeBatchRates) {
@@ -128,7 +134,9 @@ data class ProfiledSectionStats(
             samplesPerSec += " (${(sampleCountBatch.toDouble() / totalTimeNanoBatch * 1000000000).format(10, 2)})"
         }
 
-        return "${sectionName.padEnd(15)}: took $tookSecText, $sampleCountText samples, " +
+        val nestingText = " ".repeat(nesting)
+        val name = sectionName.padEnd(20 - nesting)
+        return "$nestingText$name: took $tookSecText, $sampleCountText samples, " +
                 "$msPerKSamples ms / 1000 samples, $samplesPerSec hz"
     }
 }

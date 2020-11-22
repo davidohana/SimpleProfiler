@@ -130,7 +130,7 @@ data class ProfiledSectionStats(
         var msPerKSamples = (totalTimeNano / (1000.0 * sampleCount.toDouble())).format(8, 2)
         var samplesPerSec = (sampleCount.toDouble() / totalTimeNano * 1000000000).format(10, 2)
         if (includeBatchRates) {
-            msPerKSamples += " (${(totalTimeNanoBatch / (1000.0 * sampleCountBatch.toDouble())).format(6, 2)})"
+            msPerKSamples += " (${(totalTimeNanoBatch / (1000.0 * sampleCountBatch.toDouble())).format(8, 2)})"
             samplesPerSec += " (${(sampleCountBatch.toDouble() / totalTimeNanoBatch * 1000000000).format(10, 2)})"
         }
 
